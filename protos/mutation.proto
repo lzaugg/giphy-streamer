@@ -1,0 +1,30 @@
+syntax = "proto3";
+package io.spoud.sdm.logistics.service.mutation.v1;
+
+option java_multiple_files = true;
+option java_package = "io.spoud.sdm.logistics.service.mutation.v1";
+option go_package = "logistics.service.mutation.v1";
+
+import "google/protobuf/timestamp.proto";
+
+enum AttributeChangeType {
+  UPDATE = 0;
+  DELETE = 1;
+}
+
+enum StateChange {
+  UNKNOWN = 0;
+  AVAILABLE = 1;
+  DELETED = 2;
+}
+
+message AttributeChange {
+  AttributeChangeType type = 1;
+  string value = 3;
+}
+
+message MetaAttributeChange {
+  AttributeChangeType type = 1;
+  string key = 2;
+  string value = 3;
+}

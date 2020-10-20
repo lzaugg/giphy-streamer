@@ -1,0 +1,63 @@
+syntax = "proto3";
+package io.spoud.sdm.permission.v1;
+
+option java_multiple_files = true;
+option java_package = "io.spoud.sdm.permission.v1";
+option go_package = "permission.v1";
+
+import "domain.proto";
+import "pagination.proto";
+
+service PermissionService {
+  rpc SetPermission (SetPermissionRequest) returns (SetPermissionResponse);
+  rpc UnsetPermission (UnsetPermissionRequest) returns (UnsetPermissionResponse);
+  rpc ListPermissions (ListPermissionsRequest) returns (ListPermissionsResponse);
+}
+
+message Role {
+  enum Type {
+    UNKNOWN = 0;
+    READ = 1;
+    WRITE = 2;
+    ADMIN = 3;
+  }
+}
+
+message Permission {
+  io.spoud.sdm.logistics.domain.v1.IdNameReference user = 1;
+  io.spoud.sdm.logistics.domain.v1.IdNameReference resource_group = 2;
+  Role.Type role = 3;
+  io.spoud.sdm.logistics.domain.v1.DocInfo info = 4;
+
+}
+
+message SetPermissionRequest {
+  string user_id_or_name = 1;
+  string resource_group_id_or_name = 2;
+  Role.Type role = 3;
+}
+
+message SetPermissionResponse {
+}
+
+message UnsetPermissionRequest {
+  string user_id_or_name = 1;
+  string resource_group_id_or_name = 2;
+}
+message UnsetPermissionResponse {
+}
+
+message ListPermissionsRequest {
+  io.spoud.sdm.common.pagination.v1.PageRequest page_request = 1;
+  PermissionFilter filter = 2;
+}
+
+message ListPermissionsResponse {
+  repeated Permission permissions = 1;
+  io.spoud.sdm.common.pagination.v1.PageResult page_result = 3;
+}
+
+message PermissionFilter {
+  string user_id_or_name = 1;
+  string resource_group_id_or_name = 2;
+}

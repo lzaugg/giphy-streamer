@@ -1,0 +1,45 @@
+syntax = "proto3";
+package io.spoud.sdm.logistics.domain.v1;
+
+option java_multiple_files = true;
+option java_package = "io.spoud.sdm.logistics.domain.v1";
+option go_package = "logistics.domain.v1";
+
+import "google/protobuf/timestamp.proto";
+
+message ActionInfo {
+  string username = 1;
+  google.protobuf.Timestamp timestamp = 2;
+}
+
+message DocInfo {
+  ActionInfo created = 1;
+  ActionInfo last_modified = 2;
+}
+
+message IdNameReference {
+  string id = 1;
+  string name = 2;
+
+  // due to replacements of other types by this type, range up to 10 is reserved.
+  reserved 10;
+}
+
+message IdReference {
+  string id = 1;
+
+  // due to replacements of other types by this type, range up to 10 is reserved.
+  reserved 10;
+}
+
+message ResourceGroup {
+  string id = 1;
+  string name = 2;
+  IdNameReference transport = 3;
+  bool default = 4;
+  map<string, string> properties = 5;
+  // additional entity/doc information
+  DocInfo info = 6;
+  //IdNameReference parent=7; sneak preview
+  //string path=8; sneak preview
+}

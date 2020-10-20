@@ -1,0 +1,95 @@
+digraph {
+    node [ shape=plaintext fontname=Arial fontsize="11"  shape=rectangle style=filled fillcolor="lightgray"];
+    graph [fontname=Arial fontsize=11 ]
+    edge [fontname=Arial  color="#222" fontsize=11];
+    //rankdir="LR";
+    compound=true;
+
+    
+
+    
+
+    subgraph cluster0 {
+        label="Confluent Cloud \n Topics"
+        cc_cloud_topic_n [label="launchpad_n"];
+    }
+
+    subgraph cluster1 {
+        label="Produce Frames\n "
+        producer_n [label="Produce GIF Frames #n"];
+    }
+
+    subgraph cluster2 {
+        label="SDM \n ";
+        //sdm;
+        /*data_offer_state_n;
+        data_offer_n;
+
+        data_subscription_state_n;
+        data_subscription_n;
+        */
+
+        sdm_hooks_api [label="hooks API   " fillcolor=lightblue]
+        sdm_logistics_api [label="logistics API" fillcolor=lightblue]
+
+        
+
+    }
+
+    subgraph cluster3 {
+        label="launchpad";
+        launchpad_button_n;
+        launchpad_led_n;
+
+        launchpad_p_xy;
+    }
+
+    subgraph cluster4 {
+        label="launchpad controller\n ";
+        launchpad_controller [label="launchpad API" fillcolor=lightblue];
+    }
+
+    producer_n -> cc_cloud_topic_n
+
+    data_offer_state_n -> cc_cloud_topic_n [style=dashed label=ref  ];
+ 
+
+    sdm_hooks_api -> hooker [label=<
+        <b>2.</b> hooker is listening for any changes on data subscriptions<br/>
+        <b>7.</b> hooker is getting updates about the new data subscription #ds1 and starts consuming from the associated topic (through data offer / data offer state). all data is forwarded to the launchpad controller.<br/>
+        <b>9.</b> hooker is getting informed about the deletion of the data subscription and stops consuming from all related kafka topics.
+    >];
+    sdm_hooks_api -> launchpad_controller [label=<
+        <b>1.</b> launchpad controller is listening for any changes on 'data offers'<br/>
+        <b>5.</b> launchpad controller gets updated about new data offer and sets row/led accordingly
+    >];
+
+    launchpad_controller -> sdm_logistics_api [label="manage data subscription"]
+    launchpad_controller -> launchpad_led_n
+    launchpad_controller -> launchpad_p_xy;
+    launchpad_button_n -> launchpad_controller [label=<
+        <b>6.</b> pressing on the row1 button triggers the creation of a data subscription #ds1 in the logistics API against the data offer #do1<br/>
+        <b>8.</b> pressing on the row1 button deletes the data subscription #ds1 in the logistics API
+    >]
+
+    hooker -> launchpad_controller;
+    cc_cloud_topic_n -> hooker;
+
+    sdm_kafka_agent -> sdm_logistics_api [label=<
+        <b>3.</b> sdm_kafka_agent updates data offer state
+    >];
+    sdm_kafka_agent -> cc_cloud_topic_n [lhead="cluster0"];
+    //sdm_logistics_api -> data_offer_state_n [label=""];
+    //sdm_logistics_api -> data_subscription_state_n [label=""];
+    //data_subscription_n -> data_subscription_state_n;
+    //sdm_logistics_api -> data_offer_n [label=""];
+    //data_offer_state_n -> data_offer_n;
+
+    sdm_ui -> sdm_logistics_api [label=<
+        <b>4.</b>sdm_ui creates a data offer - to the data offer state
+    >];
+
+    sdm_logistics_api -> data_subscription_n [label="create/delete data subscription"];
+    //data_subscription_n -> data_offer_n;
+    //data_subscription_state_n -> data_offer_state_n;
+}

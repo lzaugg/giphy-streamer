@@ -1,0 +1,808 @@
+syntax = "proto3";
+package io.spoud.sdm.logistics.v1;
+
+option java_multiple_files = true;
+option java_package = "io.spoud.sdm.logistics.v1";
+option go_package = "logistics.v1";
+
+import "google/protobuf/timestamp.proto";
+import "pagination.proto";
+import "domain.proto";
+import "resource_group.proto";
+import "mutation.proto";
+
+
+service Logistics {
+  rpc CreateOffer (CreateDataOfferRequest) returns (CreateDataOfferResponse);
+  rpc DeleteOffer (DeleteDataOfferRequest) returns (DeleteDataOfferResponse);
+  rpc GetOffer (GetDataOfferRequest) returns (GetDataOfferResponse);
+  rpc ListOffers (ListDataOffersRequest) returns (ListDataOffersResponse);
+  rpc UpdateOffer (UpdateDataOfferRequest) returns (UpdateDataOfferResponse);
+
+  // <b>EXPERIMENTAL</b>
+  rpc SearchDataOffers (SearchDataOffersRequest) returns (SearchDataOffersResponse);
+
+
+  rpc CreateSubscription (CreateDataSubscriptionRequest) returns (CreateDataSubscriptionResponse);
+  rpc DeleteSubscription (DeleteDataSubscriptionRequest) returns (DeleteDataSubscriptionResponse);
+  rpc GetSubscription (GetDataSubscriptionRequest) returns (GetDataSubscriptionResponse);
+  rpc ListSubscriptions (ListDataSubscriptionsRequest) returns (ListDataSubscriptionsResponse);
+  rpc UpdateSubscription (UpdateDataSubscriptionRequest) returns (UpdateDataSubscriptionResponse);
+
+  rpc CreateConnector (CreateConnectorRequest) returns (CreateConnectorResponse);
+  rpc DeleteConnector (DeleteConnectorRequest) returns (DeleteConnectorResponse);
+  rpc GetConnector (GetConnectorRequest) returns (GetConnectorResponse);
+  rpc ListConnectors (ListConnectorsRequest) returns (ListConnectorsResponse);
+  rpc UpdateConnector (UpdateConnectorRequest) returns (UpdateConnectorResponse);
+
+  rpc CreateGroup (CreateGroupRequest) returns (CreateGroupResponse);
+  rpc DeleteGroup (DeleteGroupRequest) returns (DeleteGroupResponse);
+  rpc GetGroup (GetGroupRequest) returns (GetGroupResponse);
+  rpc ListGroups (ListGroupsRequest) returns (ListGroupsResponse);
+  rpc UpdateGroup (UpdateGroupRequest) returns (UpdateGroupResponse);
+
+  rpc CreateOfferTemplate (CreateDataOfferTemplateRequest) returns (CreateDataOfferTemplateResponse);
+  rpc DeleteOfferTemplate (DeleteDataOfferTemplateRequest) returns (DeleteDataOfferTemplateResponse);
+  rpc GetOfferTemplate (GetDataOfferTemplateRequest) returns (GetDataOfferTemplateResponse);
+  rpc ListOfferTemplates (ListDataOfferTemplatesRequest) returns (ListDataOfferTemplatesResponse);
+  rpc UpdateOfferTemplate (UpdateDataOfferTemplateRequest) returns (UpdateDataOfferTemplateResponse);
+
+  rpc CreateSubscriptionTemplate (CreateDataSubscriptionTemplateRequest) returns (CreateDataSubscriptionTemplateResponse);
+  rpc DeleteSubscriptionTemplate (DeleteDataSubscriptionTemplateRequest) returns (DeleteDataSubscriptionTemplateResponse);
+  rpc GetSubscriptionTemplate (GetDataSubscriptionTemplateRequest) returns (GetDataSubscriptionTemplateResponse);
+  rpc ListSubscriptionTemplates (ListDataSubscriptionTemplatesRequest) returns (ListDataSubscriptionTemplatesResponse);
+  rpc UpdateSubscriptionTemplate (UpdateDataSubscriptionTemplateRequest) returns (UpdateDataSubscriptionTemplateResponse);
+
+  rpc GetTransport (GetTransportRequest) returns (GetTransportResponse);
+  rpc CreateTransport (CreateTransportRequest) returns (CreateTransportResponse);
+  rpc DeleteTransport (DeleteTransportRequest) returns (DeleteTransportResponse);
+  rpc ListTransports (ListTransportsRequest) returns (ListTransportsResponse);
+
+  rpc GetTransportOfferState (GetDataOfferStateRequest) returns (GetDataOfferStateResponse) {
+    option deprecated = true;
+  }
+  rpc UpdateTransportOfferState (UpdateDataOfferStateRequest) returns (UpdateDataOfferStateResponse) {
+    option deprecated = true;
+  }
+  rpc DeleteTransportOfferState (DeleteDataOfferStateRequest) returns (DeleteDataOfferStateResponse) {
+    option deprecated = true;
+  }
+  rpc ListTransportOfferStates (ListDataOfferStatesRequest) returns (ListDataOfferStatesResponse) {
+    option deprecated = true;
+  }
+
+  rpc GetDataOfferState (GetDataOfferStateRequest) returns (GetDataOfferStateResponse);
+  rpc UpdateDataOfferState (UpdateDataOfferStateRequest) returns (UpdateDataOfferStateResponse);
+  rpc DeleteDataOfferState (DeleteDataOfferStateRequest) returns (DeleteDataOfferStateResponse);
+  rpc ListDataOfferStates (ListDataOfferStatesRequest) returns (ListDataOfferStatesResponse);
+
+  rpc SaveDataOfferState (SaveDataOfferStateRequest) returns (SaveDataOfferStateResponse);
+
+  rpc SearchDataOfferStates (SearchDataOfferStatesRequest) returns (SearchDataOfferStatesResponse);
+  rpc SearchTransportOfferStates (SearchDataOfferStatesRequest) returns (SearchDataOfferStatesResponse) {
+    option deprecated = true;
+  }
+
+  rpc GetDataSubscriptionState (GetDataSubscriptionStateRequest) returns (GetDataSubscriptionStateResponse);
+  rpc DeleteDataSubscriptionState (DeleteDataSubscriptionStateRequest) returns (DeleteDataSubscriptionStateResponse);
+  rpc ListDataSubscriptionStates (ListDataSubscriptionStatesRequest) returns (ListDataSubscriptionStatesResponse);
+  rpc SaveDataSubscriptionState (SaveDataSubscriptionStateRequest) returns (SaveDataSubscriptionStateResponse);
+  rpc SearchDataSubscriptionStates (SearchDataSubscriptionStatesRequest) returns (SearchDataSubscriptionStatesResponse);
+
+  rpc GetHistory (GetHistoryRequest) returns (GetHistoryResponse);
+
+  rpc GetNamespace (io.spoud.sdm.logistics.service.resource_group.v1.GetResourceGroupRequest) returns (io.spoud.sdm.logistics.service.resource_group.v1.GetResourceGroupResponse){
+    option deprecated = true;
+  }
+  rpc UpdateNamespace (io.spoud.sdm.logistics.service.resource_group.v1.UpdateResourceGroupRequest) returns (io.spoud.sdm.logistics.service.resource_group.v1.UpdateResourceGroupResponse){
+    option deprecated = true;
+  }
+  rpc CreateNamespace (io.spoud.sdm.logistics.service.resource_group.v1.CreateResourceGroupRequest) returns (io.spoud.sdm.logistics.service.resource_group.v1.CreateResourceGroupResponse){
+    option deprecated = true;
+  }
+  rpc DeleteNamespace (io.spoud.sdm.logistics.service.resource_group.v1.DeleteResourceGroupRequest) returns (io.spoud.sdm.logistics.service.resource_group.v1.DeleteResourceGroupResponse){
+    option deprecated = true;
+  }
+  rpc ListNamespaces (io.spoud.sdm.logistics.service.resource_group.v1.ListResourceGroupsRequest) returns (io.spoud.sdm.logistics.service.resource_group.v1.ListResourceGroupsResponse){
+    option deprecated = true;
+  }
+}
+
+message GetHistoryRequest {
+  io.spoud.sdm.common.pagination.v1.PageRequest page_request = 1;
+  HistoryFilter filter = 2;
+}
+
+message HistoryFilter {
+  repeated EntityFilter entities = 1;
+}
+
+message EntityFilter {
+  string id = 1;
+  //string entity_type = 2; // to make it unique, important for external ids like user.
+}
+
+message ListHistoryRequest {
+  io.spoud.sdm.common.pagination.v1.PageRequest page_request = 1;
+}
+
+message GetHistoryResponse {
+  repeated HistoryEntry history = 1;
+  io.spoud.sdm.common.pagination.v1.PageResult page_result = 2;
+}
+
+message HistoryEntity {
+  string id = 1;
+  HistoryEntityType.Type type = 2;
+}
+
+message HistoryEntry {
+  HistoryEntity source = 1;
+  HistoryEventType.Type event_type = 2;
+  google.protobuf.Timestamp timestamp = 3;
+  string username = 4;
+}
+
+message HistoryEventType {
+  enum Type {
+    UNKNOWN = 0;
+    CREATED = 1;
+    MODIFIED = 2;
+    DELETED = 3;
+    LINKED = 4;
+    UNLINKED = 5;
+  }
+}
+
+message HistoryEntityType {
+  enum Type {
+    UNKNOWN = 0;
+    DATA_OFFER = 1;
+    DATA_OFFER_STATE = 2;
+    DATA_SUBSCRIPTION_STATE = 3;
+  }
+}
+
+
+// Data Offer
+message DataOffer {
+  string id = 1;
+  string name = 2;
+  map<string, string> properties = 3;
+  string transport_url = 4;
+  io.spoud.sdm.logistics.domain.v1.IdNameReference connector = 5;
+
+  // no contract list! responsibility of contract
+
+  // DataOfferState id.
+  string data_offer_state_id = 8;
+
+  // additional entity/doc information
+  io.spoud.sdm.logistics.domain.v1.DocInfo info = 9;
+
+  io.spoud.sdm.logistics.domain.v1.IdNameReference resource_group = 10;
+}
+
+message CreateDataOfferRequest {
+  string name = 1;
+  map<string, string> properties = 2;
+  // optional, connector can be attached/detached later on
+  string connector_id_or_name = 3;
+  // copy from an offer
+  string data_offer_id_or_name = 4;
+  // variable to replace in offer template
+  map<string, string> variable = 6;
+  string data_offer_state_id = 9;
+  string resource_group_id_or_name = 10;
+}
+
+message CreateDataOfferResponse {
+  DataOffer data_offer = 1;
+}
+
+message DeleteDataOfferRequest {
+  string id_or_name = 1;
+}
+
+message DeleteDataOfferResponse {
+}
+
+message GetDataOfferRequest {
+  string id_or_name = 1;
+}
+
+message GetDataOfferResponse {
+  DataOffer data_offer = 1;
+}
+
+message ListDataOffersRequest {
+  io.spoud.sdm.common.pagination.v1.PageRequest page_request = 1;
+}
+
+message ListDataOffersResponse {
+  repeated DataOffer data_offers = 1;
+  io.spoud.sdm.common.pagination.v1.PageResult page_result = 3;
+}
+
+message UpdateDataOfferRequest {
+  string data_offer_id_or_name = 1;
+  io.spoud.sdm.logistics.service.mutation.v1.AttributeChange name = 2;
+  io.spoud.sdm.logistics.service.mutation.v1.AttributeChange connector_id_or_name = 3;
+  io.spoud.sdm.logistics.service.mutation.v1.AttributeChange data_offer_state_id = 5;
+  repeated io.spoud.sdm.logistics.service.mutation.v1.MetaAttributeChange properties = 4;
+}
+
+
+message UpdateDataOfferResponse {
+  DataOffer data_offer = 1;
+}
+
+// <b>EXPERIMENTAL</b>
+// search
+message SearchPredicate {
+  string key = 1;
+  string value = 2;
+}
+
+// <b>EXPERIMENTAL</b>
+message SearchDataOffersRequest {
+  io.spoud.sdm.common.pagination.v1.PageRequest page_request = 1;
+
+  // Simple predicate search by key and value.
+  // All predicates are formed as an AND, except predicates with the same key.
+  // For predicates with the same key, the latest entry in the list is taken.
+  // There is no support for an "OR" right now.
+  repeated SearchPredicate predicates = 2;
+}
+
+// <b>EXPERIMENTAL</b>
+message SearchDataOffersResponse {
+  repeated DataOffer data_offers = 1;
+  io.spoud.sdm.common.pagination.v1.PageResult page_result = 3;
+}
+
+// <b>EXPERIMENTAL</b>
+message SearchDataOfferStatesRequest {
+  io.spoud.sdm.common.pagination.v1.PageRequest page_request = 1;
+
+  // Simple predicate search by key and value.
+  // All predicates are formed as an AND, except predicates with the same key.
+  // For predicates with the same key, the latest entry in the list is taken.
+  // There is no support for an "OR" right now.
+  repeated SearchPredicate predicates = 2;
+  string transport_id_or_name = 3;
+}
+
+// <b>EXPERIMENTAL</b>
+message SearchDataOfferStatesResponse {
+  repeated DataOfferState data_offer_states = 1;
+  io.spoud.sdm.common.pagination.v1.PageResult page_result = 3;
+}
+
+// <b>EXPERIMENTAL</b>
+message SearchDataSubscriptionStatesRequest {
+  io.spoud.sdm.common.pagination.v1.PageRequest page_request = 1;
+
+  // Simple predicate search by key and value.
+  // All predicates are formed as an AND, except predicates with the same key.
+  // For predicates with the same key, the latest entry in the list is taken.
+  // There is no support for an "OR" right now.
+  repeated SearchPredicate predicates = 2;
+  string data_offer_state_id_or_name = 3;
+}
+
+// <b>EXPERIMENTAL</b>
+message SearchDataSubscriptionStatesResponse {
+  repeated DataSubscriptionState data_subscription_states = 1;
+  io.spoud.sdm.common.pagination.v1.PageResult page_result = 2;
+}
+
+// subscriptions
+message DataSubscription {
+  string id = 1;
+  string name = 2;
+  map<string, string> properties = 3;
+  string transport_url = 4;
+  io.spoud.sdm.logistics.domain.v1.IdNameReference connector = 5;
+  io.spoud.sdm.logistics.domain.v1.IdNameReference data_offer = 6;
+  io.spoud.sdm.logistics.domain.v1.IdReference contract = 7;
+  reserved 8; // old DataOfferState / obsolete
+
+  // additional entity/doc information
+  io.spoud.sdm.logistics.domain.v1.DocInfo info = 9;
+  io.spoud.sdm.logistics.domain.v1.IdNameReference resource_group = 10;
+  string data_subscription_state_id = 11;
+}
+
+message CreateDataSubscriptionRequest {
+  // display name
+  string name = 1;
+  map<string, string> properties = 2;
+  // optional, connector can be attached/detached later on
+  string connector_id_or_name = 3;
+  // create ref either by id or name
+  string data_offer_id_or_name = 4;
+  // copy from a subscription
+  string data_subscription_id_or_name = 5;
+  // variable to replace in offer template and subscription template
+  map<string, string> variable = 6;
+  reserved 8; // obsolete transport ref
+  string resource_group_id_or_name = 9;
+  string data_subscription_state_id = 10;
+}
+
+message CreateDataSubscriptionResponse {
+  DataSubscription data_subscription = 1;
+}
+
+message DeleteDataSubscriptionRequest {
+  string id_or_name = 1;
+}
+
+message DeleteDataSubscriptionResponse {
+}
+
+message GetDataSubscriptionRequest {
+  string id_or_name = 1;
+}
+
+message GetDataSubscriptionResponse {
+  DataSubscription data_subscription = 1;
+}
+
+message ListDataSubscriptionsRequest {
+  io.spoud.sdm.common.pagination.v1.PageRequest page_request = 1;
+}
+
+message ListDataSubscriptionsResponse {
+  repeated DataSubscription data_subscriptions = 1;
+  io.spoud.sdm.common.pagination.v1.PageResult page_result = 2;
+}
+
+message UpdateDataSubscriptionRequest {
+  string data_subscription_id_or_name = 1;
+  io.spoud.sdm.logistics.service.mutation.v1.AttributeChange name = 2;
+  io.spoud.sdm.logistics.service.mutation.v1.AttributeChange connector_id_or_name = 3;
+  repeated io.spoud.sdm.logistics.service.mutation.v1.MetaAttributeChange properties = 4;
+  io.spoud.sdm.logistics.service.mutation.v1.AttributeChange data_subscription_state_id = 5;
+}
+
+message UpdateDataSubscriptionResponse {
+  DataSubscription data_subscription = 1;
+}
+
+// authentication by username and password
+message PasswordCredentials {
+  string username = 1;
+  string password = 2;
+  // basic auth token, including the type
+  string api_token = 3;
+}
+
+message AuthenticationCredentials {
+  oneof credentials {
+    PasswordCredentials password = 1;
+  }
+}
+
+// contract
+message Contract {
+  string id = 1;
+  io.spoud.sdm.logistics.domain.v1.IdNameReference data_offer = 2;
+  io.spoud.sdm.logistics.domain.v1.IdNameReference data_subscription = 3;
+  map<string, string> properties = 4;
+  io.spoud.sdm.logistics.domain.v1.DocInfo info = 5;
+  io.spoud.sdm.logistics.domain.v1.IdNameReference resource_group = 6;
+
+}
+
+// connectors
+message Connector {
+  // Connector id (UUID)
+  string id = 1;
+  // Connector name, human readable
+  string name = 2;
+  // Additional key/value pairs
+  map<string, string> properties = 3;
+  // Connector events transport url
+  DataSubscription events_subscription = 4;
+
+  // additional entity/doc information
+  io.spoud.sdm.logistics.domain.v1.DocInfo info = 5;
+  io.spoud.sdm.logistics.domain.v1.IdNameReference resource_group = 6;
+
+}
+message CreateConnectorRequest {
+  // display name
+  string name = 1;
+  // additional key/value pairs
+  map<string, string> properties = 2;
+  string resource_group_id_or_name = 3;
+
+}
+message CreateConnectorResponse {
+  Connector connector = 1;
+  // authentication credentials. (evolution possible through repeated field, e.g. different auth per transport)
+  AuthenticationCredentials authentication = 2;
+}
+message DeleteConnectorRequest {
+  // Lookup connector by id or name
+  string id_or_name = 1;
+}
+message DeleteConnectorResponse {
+}
+message GetConnectorRequest {
+  // Lookup connector by id or name
+  string id_or_name = 1;
+}
+message GetConnectorResponse {
+  Connector connector = 1;
+}
+message ListConnectorsRequest {
+  io.spoud.sdm.common.pagination.v1.PageRequest page_request = 1;
+}
+message ListConnectorsResponse {
+  repeated Connector connectors = 1;
+  io.spoud.sdm.common.pagination.v1.PageResult page_result = 2;
+}
+
+message UpdateConnectorRequest {
+  string connector_id_or_name = 1;
+  io.spoud.sdm.logistics.service.mutation.v1.AttributeChange name = 2;
+  repeated io.spoud.sdm.logistics.service.mutation.v1.MetaAttributeChange properties = 3;
+}
+
+message UpdateConnectorResponse {
+  Connector connector = 1;
+}
+
+// groups
+message Group {
+  // Group id (UUID)
+  string id = 1;
+  // Group name, human readable
+  string name = 2;
+  // Additional key/value pairs
+  map<string, string> properties = 3;
+
+  // additional entity/doc information
+  io.spoud.sdm.logistics.domain.v1.DocInfo info = 4;
+}
+message CreateGroupRequest {
+  // display name
+  string name = 1;
+  // additional key/value pairs
+  map<string, string> properties = 2;
+}
+message CreateGroupResponse {
+  Group group = 1;
+}
+message DeleteGroupRequest {
+  // Lookup group by id or name
+  string id_or_name = 1;
+}
+message DeleteGroupResponse {
+}
+message GetGroupRequest {
+  // Lookup group by id or name
+  string id_or_name = 1;
+}
+message GetGroupResponse {
+  Group group = 1;
+}
+message ListGroupsRequest {
+  io.spoud.sdm.common.pagination.v1.PageRequest page_request = 1;
+}
+message ListGroupsResponse {
+  repeated Group groups = 1;
+  io.spoud.sdm.common.pagination.v1.PageResult page_result = 2;
+}
+
+message UpdateGroupRequest {
+  string group_id_or_name = 1;
+  io.spoud.sdm.logistics.service.mutation.v1.AttributeChange name = 2;
+  repeated io.spoud.sdm.logistics.service.mutation.v1.MetaAttributeChange properties = 3;
+}
+
+message UpdateGroupResponse {
+  Group group = 1;
+}
+
+// Offer Template
+message DataOfferTemplate {
+  string id = 1;
+  string name = 2;
+  map<string, string> properties = 3;
+  io.spoud.sdm.logistics.domain.v1.IdNameReference connector = 4;
+
+  // additional entity/doc information
+  io.spoud.sdm.logistics.domain.v1.DocInfo info = 5;
+  io.spoud.sdm.logistics.domain.v1.IdNameReference resource_group = 6;
+}
+message CreateDataOfferTemplateRequest {
+  string name = 1;
+  map<string, string> properties = 2;
+  string connector_id_or_name = 3;
+  string resource_group_id_or_name = 4;
+
+}
+
+message CreateDataOfferTemplateResponse {
+  DataOfferTemplate data_offer_template = 1;
+}
+
+message DeleteDataOfferTemplateRequest {
+  string id_or_name = 1;
+}
+
+message DeleteDataOfferTemplateResponse {
+}
+
+message GetDataOfferTemplateRequest {
+  string id_or_name = 1;
+}
+
+message GetDataOfferTemplateResponse {
+  DataOfferTemplate data_offer_template = 1;
+}
+
+message ListDataOfferTemplatesRequest {
+  io.spoud.sdm.common.pagination.v1.PageRequest page_request = 1;
+}
+
+message ListDataOfferTemplatesResponse {
+  repeated DataOfferTemplate data_offer_templates = 1;
+  io.spoud.sdm.common.pagination.v1.PageResult page_result = 2;
+}
+
+message UpdateDataOfferTemplateRequest {
+  string id_or_name = 1;
+  io.spoud.sdm.logistics.service.mutation.v1.AttributeChange name = 2;
+  io.spoud.sdm.logistics.service.mutation.v1.AttributeChange connector_id_or_name = 3;
+  repeated io.spoud.sdm.logistics.service.mutation.v1.MetaAttributeChange properties = 4;
+}
+
+message UpdateDataOfferTemplateResponse {
+  DataOfferTemplate data_offer_template = 1;
+}
+
+// Subscription Template
+message DataSubscriptionTemplate {
+  string id = 1;
+  string name = 2;
+  map<string, string> properties = 3;
+  io.spoud.sdm.logistics.domain.v1.IdNameReference connector = 4;
+
+  // additional entity/doc information
+  io.spoud.sdm.logistics.domain.v1.DocInfo info = 5;
+
+  io.spoud.sdm.logistics.domain.v1.IdNameReference resource_group = 6;
+}
+message CreateDataSubscriptionTemplateRequest {
+  string name = 1;
+  map<string, string> properties = 2;
+  string connector_id_or_name = 3;
+  string resource_group_id_or_name = 4;
+
+}
+
+message CreateDataSubscriptionTemplateResponse {
+  DataSubscriptionTemplate data_subscription_template = 1;
+}
+
+message DeleteDataSubscriptionTemplateRequest {
+  string id_or_name = 1;
+}
+
+message DeleteDataSubscriptionTemplateResponse {
+}
+
+message GetDataSubscriptionTemplateRequest {
+  string id_or_name = 1;
+}
+
+message GetDataSubscriptionTemplateResponse {
+  DataSubscriptionTemplate data_subscription_template = 1;
+}
+
+message ListDataSubscriptionTemplatesRequest {
+  io.spoud.sdm.common.pagination.v1.PageRequest page_request = 1;
+}
+
+message ListDataSubscriptionTemplatesResponse {
+  repeated DataSubscriptionTemplate data_subscription_templates = 1;
+  io.spoud.sdm.common.pagination.v1.PageResult page_result = 2;
+}
+
+message UpdateDataSubscriptionTemplateRequest {
+  string id_or_name = 1;
+  io.spoud.sdm.logistics.service.mutation.v1.AttributeChange name = 2;
+  io.spoud.sdm.logistics.service.mutation.v1.AttributeChange connector_id_or_name = 3;
+  repeated io.spoud.sdm.logistics.service.mutation.v1.MetaAttributeChange properties = 4;
+}
+
+message UpdateDataSubscriptionTemplateResponse {
+  DataSubscriptionTemplate data_subscription_template = 1;
+}
+
+// Transports
+message Transport {
+  string id = 1;
+  string name = 2;
+  map<string, string> properties = 4;
+
+  // additional entity/doc information
+  io.spoud.sdm.logistics.domain.v1.DocInfo info = 5;
+}
+
+message GetTransportRequest {
+  string id_or_name = 1;
+}
+
+message GetTransportResponse {
+  Transport transport = 1;
+}
+
+message CreateTransportResponse {
+  Transport transport = 1;
+}
+
+
+message CreateTransportRequest {
+  string name = 1;
+  map<string, string> properties = 2;
+}
+
+message DeleteTransportResponse {
+
+}
+
+message DeleteTransportRequest {
+  string id_or_name = 1;
+}
+
+
+message ListTransportsRequest {
+  io.spoud.sdm.common.pagination.v1.PageRequest page_request = 1;
+}
+
+message ListTransportsResponse {
+  repeated Transport transports = 1;
+  io.spoud.sdm.common.pagination.v1.PageResult page_result = 2;
+}
+
+// DataOfferState
+message DataOfferState {
+  string id = 1;
+  string name = 2;
+  map<string, string> properties = 4;
+  string transport_url = 5;
+  io.spoud.sdm.logistics.domain.v1.IdNameReference transport = 6;
+  bool deleted = 7;
+  io.spoud.sdm.logistics.domain.v1.IdNameReference data_offer = 8;
+
+  // additional entity/doc information
+  io.spoud.sdm.logistics.domain.v1.DocInfo info = 9;
+  io.spoud.sdm.logistics.domain.v1.IdNameReference resource_group = 10;
+
+}
+
+message GetDataOfferStateRequest {
+  string id_or_name = 1;
+  enum NotExistsResolution {
+    THROW_ERROR = 0;
+    RETURN_EMPTY = 1;
+  }
+  NotExistsResolution not_exists_resolution = 2;
+}
+
+message GetDataOfferStateResponse {
+  DataOfferState data_offer_state = 1;
+}
+
+message UpdateDataOfferStateRequest {
+  // the id can be defined upon creation
+  string id = 6;
+  string name = 1;
+  map<string, string> properties = 2;
+  string transport_id_or_name = 3;
+  string transport_url = 5;
+  bool deleted = 7;
+  string resource_group_id_or_name = 8;
+}
+
+message UpdateDataOfferStateResponse {
+  DataOfferState data_offer_state = 1;
+}
+
+message DeleteDataOfferStateResponse {
+
+}
+
+message DeleteDataOfferStateRequest {
+  string id_or_name = 1;
+}
+
+message ListDataOfferStatesRequest {
+  io.spoud.sdm.common.pagination.v1.PageRequest page_request = 1;
+  string transport_id_or_name = 2;
+}
+
+message ListDataOfferStatesResponse {
+  repeated DataOfferState data_offer_states = 1;
+  io.spoud.sdm.common.pagination.v1.PageResult page_result = 2;
+}
+
+message SaveDataOfferStateRequest {
+  string data_offer_state_id_or_name = 1;
+  string name = 2;
+  string transport_id_or_name = 3;
+  io.spoud.sdm.logistics.service.mutation.v1.AttributeChange transport_url = 4;
+  io.spoud.sdm.logistics.service.mutation.v1.StateChange state = 5;
+  repeated io.spoud.sdm.logistics.service.mutation.v1.MetaAttributeChange properties = 6;
+  string resource_group_id_or_name = 7;
+}
+
+message SaveDataOfferStateResponse {
+  DataOfferState data_offer_state = 1;
+}
+
+// DataSubscriptionState
+message DataSubscriptionState {
+  string id = 1;
+  string name = 2;
+  map<string, string> properties = 3;
+  string transport_url = 4;
+  io.spoud.sdm.logistics.domain.v1.IdNameReference data_offer_state = 5;
+  bool deleted = 6;
+
+  // additional entity/doc information
+  io.spoud.sdm.logistics.domain.v1.DocInfo info = 7;
+  io.spoud.sdm.logistics.domain.v1.IdNameReference resource_group = 8;
+  io.spoud.sdm.logistics.domain.v1.IdNameReference data_subscription = 9;
+}
+
+message GetDataSubscriptionStateRequest {
+  string id_or_name = 1;
+  enum NotExistsResolution {
+    THROW_ERROR = 0;
+    RETURN_EMPTY = 1;
+  }
+  NotExistsResolution not_exists_resolution = 2;
+}
+
+message GetDataSubscriptionStateResponse {
+  DataSubscriptionState data_subscription_state = 1;
+}
+
+message DeleteDataSubscriptionStateResponse {
+
+}
+
+message DeleteDataSubscriptionStateRequest {
+  string id_or_name = 1;
+}
+
+message ListDataSubscriptionStatesRequest {
+  io.spoud.sdm.common.pagination.v1.PageRequest page_request = 1;
+  string data_offer_state_id_or_name = 2;
+}
+
+message ListDataSubscriptionStatesResponse {
+  repeated DataSubscriptionState data_subscription_states = 1;
+  io.spoud.sdm.common.pagination.v1.PageResult page_result = 2;
+}
+
+message SaveDataSubscriptionStateRequest {
+  string data_subscription_state_id_or_name = 1;
+  string name = 2;
+  string data_offer_state_id_or_name = 3;
+  io.spoud.sdm.logistics.service.mutation.v1.AttributeChange transport_url = 4;
+  io.spoud.sdm.logistics.service.mutation.v1.StateChange state = 5;
+  repeated io.spoud.sdm.logistics.service.mutation.v1.MetaAttributeChange properties = 6;
+  string resource_group_id_or_name = 7;
+}
+
+message SaveDataSubscriptionStateResponse {
+  DataSubscriptionState data_subscription_state = 1;
+}
